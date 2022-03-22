@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyWeatherAppCAT22</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_city">City</string>
+    <string name="btn_search_city">Search</string>
+</resources>
