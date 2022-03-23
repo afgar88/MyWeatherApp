@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.myweatherappcat22.R
+import com.example.myweatherappcat22.databinding.FragmentForecastDetailsBinding
+import com.example.myweatherappcat22.model.Forecast
+import com.example.myweatherappcat22.utils.fFeel
+import com.example.myweatherappcat22.utils.fTemp
+import com.example.myweatherappcat22.utils.hour
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -22,11 +25,16 @@ class ForecastDetailsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val binding by lazy{
+        FragmentForecastDetailsBinding.inflate(layoutInflater)
+    }
+
+    var forecast: Forecast?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+         forecast=it?.getParcelable("details")
         }
     }
 
@@ -34,8 +42,15 @@ class ForecastDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forecast_details, container, false)
+        // Inflate the layout for this fragment"
+        // TITTLE: ${Events[param1].title}
+
+        binding.time.text=("Feel:${forecast?.hour()}").toString()
+        binding.feelLike.text=("Feel:${forecast?.main?.fFeel()}").toString()
+        binding.grndLevel.text=("Ground Lvl:${forecast?.main?.grndLevel}").toString()
+        binding.humidity.text=("Humidity:${forecast?.main?.humidity}").toString()
+        binding.desc.text=("Description:${forecast?.weather?.get(0)?.description}").toString()
+        return binding.root
     }
 
     companion object {
@@ -52,8 +67,7 @@ class ForecastDetailsFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             ForecastDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
                 }
             }
     }

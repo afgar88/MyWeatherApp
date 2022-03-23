@@ -8,6 +8,8 @@ import java.util.*
 
 fun Main.fTemp(): String = ktoF(this.temp).toString()+" F"
 
+fun Main.fFeel(): String = ktoF(this.feelsLike).toString()+" F"
+
 fun ktoF(k: Double): Int = (((k - 273.5) * 1.8) + 32).toInt()
 
 fun Forecast.hour(pattern: String = "HH:mm"): String {

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".views.SearchCityFragment">
+    tools:context=".views.SearchCityFragment"
+    android:background="@drawable/background2">
 
     <EditText
         android:layout_width="match_parent"
@@ -13,6 +14,7 @@
         android:id="@+id/search_city"
         android:layout_gravity="center"
         android:hint="@string/search_city"
+        android:textColor="@color/white"
         android:layout_marginHorizontal="16dp"
         android:inputType="text"
         android:autofillHints="Marietta" />

@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myweatherappcat22.R
 import com.example.myweatherappcat22.adapter.WeatherAdapter
 import com.example.myweatherappcat22.databinding.FragmentForecastBinding
+import com.example.myweatherappcat22.model.Forecast
 import com.example.myweatherappcat22.viewmodel.ResultState
 
 private const val ARG_PARAM1 = "param1"
@@ -25,10 +27,23 @@ class ForecastFragment : BaseFragment() {
     }
 
     private val weatherAdapter by lazy {
-        WeatherAdapter()
+        WeatherAdapter(clickDetail = ::detailCity)
     }
 
+
     lateinit var city: String
+
+
+    private fun detailCity(forecast: Forecast) {
+        Log.d("first",forecast.dtTxt)
+
+        findNavController().navigate(
+            R.id.action_ForecastFragment_to_DetailsFragment,
+            Bundle().apply {
+                putParcelable("details", forecast)
+            }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +51,7 @@ class ForecastFragment : BaseFragment() {
             city = it?.getString("city") ?: city
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,14 +70,14 @@ class ForecastFragment : BaseFragment() {
         }
 
         weatherViewModel.cityForecast.observe(viewLifecycleOwner, ::handleState)
-            Log.d("CityForecast",city)
+        Log.d("CityForecast", city)
         weatherViewModel.getForecast(city)
 
         return binding.root
     }
 
     private fun handleState(resultState: ResultState) {
-        when(resultState) {
+        when (resultState) {
             is ResultState.LOADING -> {
                 Toast.makeText(requireContext(), "LOADING...", Toast.LENGTH_LONG).show()
             }
@@ -70,7 +86,11 @@ class ForecastFragment : BaseFragment() {
             }
             is ResultState.ERROR -> {
                 Log.e("FORECAST", resultState.error.localizedMessage, resultState.error)
-                Toast.makeText(requireContext(), resultState.error.localizedMessage, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    resultState.error.localizedMessage,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

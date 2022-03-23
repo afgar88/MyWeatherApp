@@ -10,7 +10,8 @@ import com.example.myweatherappcat22.utils.fTemp
 import com.example.myweatherappcat22.utils.hour
 
 class WeatherAdapter(
-    private val forecastList: MutableList<Forecast> = mutableListOf()
+    private val forecastList: MutableList<Forecast> = mutableListOf(),
+    private val clickDetail: (forecast: Forecast) -> Unit
 ) : RecyclerView.Adapter<ForecastViewHolder>() {
 
     fun setForecast(newForecast: List<Forecast>) {
@@ -21,7 +22,7 @@ class WeatherAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
         val view = ForcastItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ForecastViewHolder(view)
+        return ForecastViewHolder(view, clickDetail)
     }
 
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) =
@@ -30,12 +31,16 @@ class WeatherAdapter(
     override fun getItemCount(): Int = forecastList.size
 }
 
-class ForecastViewHolder(private val binding: ForcastItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class ForecastViewHolder(
+    private val binding: ForcastItemBinding,
+   private val clickDetail: (forecast: Forecast) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(forecast: Forecast) {
-        binding.hour.text=forecast.hour()
+        binding.hour.text = forecast.hour()
         binding.temp.text = forecast.main.fTemp()
-        binding.desc.text=forecast.weather[0].description
+        binding.desc.text = forecast.weather[0].description
+        binding.root.setOnClickListener{clickDetail(forecast)}
 
     }
 
