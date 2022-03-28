@@ -31,7 +31,7 @@ class ForecastFragment : BaseFragment() {
     }
 
 
-    lateinit var city: String
+    var city: String? = null
 
 
     private fun detailCity(forecast: Forecast) {
@@ -48,7 +48,8 @@ class ForecastFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            city = it?.getString("city") ?: city
+            // here if that value comes as null you app will crash, because city is a lateinit and is not initialized before
+            city = it.getString("city")
         }
     }
 
@@ -70,8 +71,11 @@ class ForecastFragment : BaseFragment() {
         }
 
         weatherViewModel.cityForecast.observe(viewLifecycleOwner, ::handleState)
-        Log.d("CityForecast", city)
-        weatherViewModel.getForecast(city)
+
+        city?.let {
+            Log.d("CityForecast", it)
+            weatherViewModel.getForecast(it)
+        }
 
         return binding.root
     }
